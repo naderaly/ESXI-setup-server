@@ -34,7 +34,7 @@ This document contains Install instructions and demo walkthroughs for the Glassw
         | :---: | :---: |
         | k8-icap-server-1 | k8-icap-sow.ova |
         | k8-proxy-server-1 | Proxy-Rebuild.ova |
-        | file-drop | sow-rest.ova | 
+        | sow-rest | sow-rest.ova | 
         
         ![Alt text](docs/screenshots/VMSelectOVA.png) 
          
@@ -180,40 +180,82 @@ This document contains Install instructions and demo walkthroughs for the Glassw
 
 ### Part 2 (Seeing ICAP Kubernetes pods in action)
 
-1. Start watching k8 (Kubernetes) pods events
-    - In ESXi, open browser console for k8-icap-server-1 
-        - Or ssh into vm using: ssh glasswall@{ip of  k8-icap-server-1}   (accept the ECDSA key fingerprint)
-    - Run : kubectl get pods -A --watch
-    - Keep this window open
+1. Start monitoring Kubernetes pods events in k8-icap-server-1 
+    1. In ESXi, open browser console for k8-icap-server-1 
+    
+                    OR 
+      
+      ssh into vm from local terminal using:
+        
+            ssh glasswall@{ip of k8-icap-server-1}   
+            
+            (enter k8-icap-server-1 and accept the ECDSA key fingerprint)
+                   
+    2. Run : 
+    
+            kubectl get pods -A --watch
+            
+    3. Keep this window open for minotoring
+    
 2. Generate traffic
-    - Open Terminal where https://github.com/k8-proxy/icap-client-docker.git was cloned
-    - Run:  ./icap-client.sh {ip of  k8-icap-server-1} 
-3. See multiple status of the pod created to process the file sent by the ./icap-client.sh tool (one pod per file processed)
- NAMESPACE         NAME                                           				     READY   STATUS      		RESTARTS   AGE
-icap-adaptation   rebuild-2bcbfe8b-c6d4-46d4-bc89-400d582f7a96   0/1     Pending     		0          0s
-icap-adaptation   rebuild-2bcbfe8b-c6d4-46d4-bc89-400d582f7a96   0/1     Pending     		0          0s
-icap-adaptation   rebuild-2bcbfe8b-c6d4-46d4-bc89-400d582f7a96   0/1     ContainerCreating   0          0s
-icap-adaptation   rebuild-2bcbfe8b-c6d4-46d4-bc89-400d582f7a96   0/1     ContainerCreating   0          1s
-icap-adaptation   rebuild-2bcbfe8b-c6d4-46d4-bc89-400d582f7a96   1/1     Running             		0          1s
-icap-adaptation   rebuild-2bcbfe8b-c6d4-46d4-bc89-400d582f7a96   0/1     Completed           	0          5s
-
-4. Send multiple requests 
-    1. Run: ./parallel-icap-requests.sh {ip of  k8-icap-server-1}  10
-    2. See the multiple events in the k8-icap-server-1 console
+    1. Open local terminal where https://github.com/k8-proxy/icap-client-docker.git was cloned in 6th step of Part 1.
+            
+         (This will be reffred as  `icap-client-terminal` )
+          
+    2. Run:  
+    
+            ./icap-client.sh {ip of k8-icap-server-1} 
+            
+3. Switch back to `k8-icap-server-1` console to see multiple status of the pod created to process the file sent by the ./icap-client.sh tool (one pod per file processed)
+      ![Alt text](docs/screenshots/icap-server-pods.png) 
+      
+4. Send multiple requests  
+    1. Go to `icap-client-terminal`
+    2. Run: 
+    
+            ./parallel-icap-requests.sh {ip of  k8-icap-server-1}  10
+               
+    3. See the multiple events in the `k8-icap-server-1` console
+        ![Alt text](docs/screenshots/icap-server-pods2.png)
+    
 5. Generate web traffic and see file being processed
-    - Run: ./icap-client-docker % curl https://owasp.org/www-pdf-archive/OWASP_Top_10-2017_%28en%29.pdf.pdf --insecure
-        - See pod events in k8-icap-server-1
-    - Browse www.glasswallsolutions.com or owasp.org websites (with the local dns changes made to the hosts file) and open any pdf
-        - See pod events in k8-icap-server-1  (one pod per file processed) 
+
+    1. Run: 
+            
+            ./icap-client-docker % curl https://owasp.org/www-pdf-archive/OWASP_Top_10-2017_%28en%29.pdf.pdf --insecure
+            
+        1. See pod events in `k8-icap-server-1` console to see multiple status of the pod created to process the files
+        
+    2. Browse `www.glasswallsolutions.com` or `owasp.org` websites (with the local dns changes made to the hosts file) 
+        1. Open any pdf
+        2. See pod events in `k8-icap-server-1` console (one pod per file processed) 
+        
 6. Install octant tool to see more details about kubernetes setup (for more details about Octant see https://octant.dev/ and https://github.com/vmware-tanzu/octant)
-    - In k8-icap-server-1 console 
-    - Run: wget https://github.com/vmware-tanzu/octant/releases/download/v0.16.2/octant_0.16.2_Linux-64bit.deb
-    - Run: sudo dpkg -i octant_0.16.2_Linux-64bit.deb
-    - Exit console
-    - Run: ssh -L 7777:127.0.0.1:7777 glasswall@78.159.113.49
-    - Run: octant
-    - Open in browser: http://localhost:7777/#/  
+    
+    1. In `k8-icap-server-1` console 
+   
+    2. Run: 
+    
+            wget https://github.com/vmware-tanzu/octant/releases/download/v0.16.2/octant_0.16.2_Linux-64bit.deb
+            
+    3. Run: 
+            
+            sudo dpkg -i octant_0.16.2_Linux-64bit.deb
+            
+    4. Exit console by typing `exit`
+            
+    5. Run below in local terminal: 
+            
+            ssh -L 7777:127.0.0.1:7777 glasswall@78.159.113.49
+            
+    6. Run:
+    
+            octant
+            
+    7. Open in browser: `http://localhost:7777/#/`
+    
 7. Use Octant UI:
+
     - Chose icap-adaptation from the Namespaces drop down menu (top menu, in the middle)
         - http://localhost:7777/#/workloads/namespace/icap-adaptation
     - Click on events 
@@ -359,31 +401,43 @@ icap-adaptation   rebuild-2bcbfe8b-c6d4-46d4-bc89-400d582f7a96   0/1     Complet
 
 ### Part 4) File Drop
 
-1. Download 3 OVAs from https://github.com/k8-proxy/ESXI-setup-server/wiki
-    - File-Drop 
-2. Setup File Drop
-    - In ESXi, open browser console for sow-rest (user:secret)
-    - Run: passwd user    (to a stronger password)
-    - Run sudo vim /etc/netplan/00-installer-config.yaml (change IP and Gateway to an valid IP in the VM server)
-        - Replace the value: 
-           network:
-             version: 2
-               renderer: networkd
-			ethernets:
-				eth0:
-					dhcp4: yes 
-        - With (note that this is an yaml file so that layout/spaces is import)
-			ethernets:
-				eth0:
-					addresses:
-					- {IP address of file-drop}
-					gateway4: {gateway of server}
-					nameservers:
-						addresses:
-						- 8.8.8.8
+1. Go to VM sow-rest (File-Drop) in ESXi created in Part 1.
+
+2. Setup File Drop configarations
+    - In ESXi, open browser console for sow-rest 
     
-    - Run: `sudo netplan apply`    
-    - Run: ping www.google.com   (to confirm that internet access is working)	
+            user:secret
+            passwd user    (to a stronger password) 
+            
+    - Run: 
+    
+            sudo vim /etc/netplan/00-installer-config.yaml (change IP and Gateway to an valid IP in the VM server)
+            
+        - Replace the value: 
+        
+               network:
+                 version: 2
+                   renderer: networkd
+                ethernets:
+                    eth0:
+                        dhcp4: yes 
+                        
+        - With (note that this is an yaml file so that layout/spaces is import)
+                
+                ethernets:
+                    eth0:
+                        addresses:
+                        - {IP address of file-drop}
+                        gateway4: {IPv4 gateway of server}
+                        nameservers:
+                            addresses:
+                            - 8.8.8.8
+    
+    - Run:
+    
+            sudo netplan apply 
+       
+    - Run: `ping www.google.com` (to confirm that internet access is working)	
     - Run: `sudo systemctl restart k3s`
     - After reboot open https://{IP address of file-drop}
         - Click on Login (no password for now)
