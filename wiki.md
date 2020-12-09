@@ -254,7 +254,7 @@ This document contains Install instructions and demo walkthroughs for the Glassw
             
     7. Open in browser: `http://localhost:7777/#/`
     
-        ![Alt text](docs/screenshots/octant_homescreen.png)
+       ![Alt text](docs/screenshots/octant_homescreen.png)
     
 7. Use Octant UI:
 
@@ -262,13 +262,13 @@ This document contains Install instructions and demo walkthroughs for the Glassw
     
         - http://localhost:7777/#/workloads/namespace/icap-adaptation
         
-            ![Alt text](docs/screenshots/octant_screen2.png)
+        ![Alt text](docs/screenshots/octant_screen2.png)
         
     - Click on events 
     
         - http://localhost:7777/#/overview/namespace/icap-adaptation/events
         
-        ![Alt text](docs/screenshots/octant_screen3.png)
+       ![Alt text](docs/screenshots/octant_screen3.png)
         
     - Generate some traffic using `./icap-client.sh` or `./parallel-icap-requests.sh` in `icap-client-terminal`
     - Click on one of the rebuild-* pods (in the Kind column), and notice
@@ -435,16 +435,19 @@ This document contains Install instructions and demo walkthroughs for the Glassw
                         dhcp4: yes 
                         
         - With (note that this is an yaml file so that layout/spaces is import)
-                
-                ethernets:
-                    eth0:
-                        addresses:
-                        - {IP address of file-drop}
-                        gateway4: {IPv4 gateway of server}
-                        nameservers:
-                            addresses:
-                            - 8.8.8.8
-    
+               
+               network:
+                 version: 2
+                 renderer: networkd
+                 ethernets:
+                   eth0:
+                     addresses:
+                       - {IP address of file-drop}/{subnet}
+                     gateway4: {IPv4 gateway of server}
+                     nameservers:
+                       addresses:
+                           - 8.8.8.8
+                                
     - Run:
     
             sudo netplan apply 
