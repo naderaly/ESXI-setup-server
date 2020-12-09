@@ -30,11 +30,11 @@ This document contains Install instructions and demo walkthroughs for the Glassw
             Give name for VM as shown in below table.
             Select respective OVA from below table in field "click to select files or drag/drop" and add downloaded OVA.
          
-        | Name    | OVA |
-        | :---: | :---: |
-        | k8-icap-server-1 | k8-icap-sow.ova |
-        | k8-proxy-server-1 | Proxy-Rebuild.ova |
-        | sow-rest | sow-rest.ova | 
+        | Name    | OVA | Video link |
+        | :---: | :---: | :---: |
+        | k8-icap-server-1 | k8-icap-sow.ova | |
+        | k8-proxy-server-1 | Proxy-Rebuild.ova | |
+        | sow-rest | sow-rest.ova | |
         
         ![Alt text](docs/screenshots/VMSelectOVA.png) 
          
@@ -181,16 +181,10 @@ This document contains Install instructions and demo walkthroughs for the Glassw
 ### Part 2 (Seeing ICAP Kubernetes pods in action)
 
 1. Start monitoring Kubernetes pods events in k8-icap-server-1 
-    1. In ESXi, open browser console for k8-icap-server-1 
-    
-                    OR 
-      
-      ssh into vm from local terminal using:
-        
+    1. In ESXi, open browser console for k8-icap-server-1 OR ssh into vm from local terminal using:
+   
             ssh glasswall@{ip of k8-icap-server-1}   
-            
-            (enter k8-icap-server-1 and accept the ECDSA key fingerprint)
-                   
+            (enter k8-icap-server-1 and accept the ECDSA key fingerprint)               
     2. Run : 
     
             kubectl get pods -A --watch
@@ -207,6 +201,7 @@ This document contains Install instructions and demo walkthroughs for the Glassw
             ./icap-client.sh {ip of k8-icap-server-1} 
             
 3. Switch back to `k8-icap-server-1` console to see multiple status of the pod created to process the file sent by the ./icap-client.sh tool (one pod per file processed)
+     
       ![Alt text](docs/screenshots/icap-server-pods.png) 
       
 4. Send multiple requests  
@@ -216,6 +211,7 @@ This document contains Install instructions and demo walkthroughs for the Glassw
             ./parallel-icap-requests.sh {ip of  k8-icap-server-1}  10
                
     3. See the multiple events in the `k8-icap-server-1` console
+    
         ![Alt text](docs/screenshots/icap-server-pods2.png)
     
 5. Generate web traffic and see file being processed
@@ -450,7 +446,7 @@ This document contains Install instructions and demo walkthroughs for the Glassw
                                 
     - Run:
     
-            sudo netplan apply 
+                sudo netplan apply 
        
     - Run: `ping www.google.com` (to confirm that internet access is working)	
     - Run: `sudo systemctl restart k3s`
