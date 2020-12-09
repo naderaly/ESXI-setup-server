@@ -62,7 +62,7 @@ This document contains Install instructions and demo walkthroughs for the Glassw
             
             Below this IP is referenced as {IP of k8-icap-server-1}
             
-         ![Alt text](docs/screenshots/IcapServerNetplan.png)
+         ![Alt text](docs/screenshots/icap-server-netplan-config.png)
                    
     4. Run:
             
