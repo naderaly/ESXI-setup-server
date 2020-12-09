@@ -232,7 +232,7 @@ This document contains Install instructions and demo walkthroughs for the Glassw
         
 6. Install octant tool to see more details about kubernetes setup (for more details about Octant see https://octant.dev/ and https://github.com/vmware-tanzu/octant)
     
-    1. In `k8-icap-server-1` console 
+    1. In `k8-icap-server-1` VSXi console or in `ssh glasswall@{ IP of k8-icap-server-1 }` in local terminal
    
     2. Run: 
     
@@ -254,13 +254,23 @@ This document contains Install instructions and demo walkthroughs for the Glassw
             
     7. Open in browser: `http://localhost:7777/#/`
     
+        ![Alt text](docs/screenshots/octant_homescreen.png)
+    
 7. Use Octant UI:
 
     - Chose icap-adaptation from the Namespaces drop down menu (top menu, in the middle)
+    
         - http://localhost:7777/#/workloads/namespace/icap-adaptation
+        
+            ![Alt text](docs/screenshots/octant_screen2.png)
+        
     - Click on events 
+    
         - http://localhost:7777/#/overview/namespace/icap-adaptation/events
-    - (Generate some traffic using ./icap-client.sh or ./parallel-icap-requests.sh tools)
+        
+        ![Alt text](docs/screenshots/octant_screen3.png)
+        
+    - Generate some traffic using `./icap-client.sh` or `./parallel-icap-requests.sh` in `icap-client-terminal`
     - Click on one of the rebuild-* pods (in the Kind column), and notice
         - Summary ( for example: Pod Conditions, Environment variables, Volume Mounts, Events)
         - Resource Viewer (Graph of resources used)
@@ -278,9 +288,11 @@ This document contains Install instructions and demo walkthroughs for the Glassw
 			FileId: 356cc355-832c-4ee9-92f4-b1134af0e64c, successfully rebuilt.
 			Sent Transaction Event, FileId: 356cc355-832c-4ee9-92f4-b1134af0e64c, EventId: RebuildCompleted
 			Sent Message, ReplyTo: amq.rabbitmq.reply-to.g1hkACByYWJiaXRAcmFiYml0bXEtY29udHJvbGxlci12NmdqcAAADW4AAAAAX8nTxQ==.HY5rFxz+Z2C2J8B69FZ+TQ==, FileId: 356cc355-832c-4ee9-92f4-b1134af0e64c, Outcome: replace 
+		
 		- Terminal (not available because pod is long gone) 
 			- to open an terminal into an running pod, try the rabbitmq-controller
 				(available from http://localhost:7777/#/overview/namespace/icap-adaptation/workloads/pods)
+				
     - On the left navigation, click on Workloads and then Pods
         - http://localhost:7777/#/overview/namespace/icap-adaptation/workloads/jobs
         - Run: ./parallel-icap-requests.sh {ip of  k8-icap-server-1}  20         (which will make 20 requests to the server)
@@ -406,8 +418,8 @@ This document contains Install instructions and demo walkthroughs for the Glassw
 2. Setup File Drop configarations
     - In ESXi, open browser console for sow-rest 
     
-            user:secret
-            passwd user    (to a stronger password) 
+            login user :  user
+            password   :  secret  
             
     - Run: 
     
