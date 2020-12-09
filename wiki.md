@@ -16,11 +16,13 @@ This document contains Install instructions and demo walkthroughs for the Glassw
     - File-drop
 2. Login to ESXi 6.7 server
 3. Create PortGroup Network called VM  
+
       ![Alt text](docs/screenshots/PortGroup.png)
       
 4. Deploy each OVAs in ESXI 6.7 Server
     
     1. “Create/Register VMs” from OVAS (using “Deploy a virtual machine from an OVF or OVA file)
+    
         ![Alt text](docs/screenshots/VMDeployOva.png)
         
     2.  Select "Deploy a virtual machine from an OVF or OVA file" 
@@ -37,18 +39,21 @@ This document contains Install instructions and demo walkthroughs for the Glassw
         ![Alt text](docs/screenshots/VMSelectOVA.png) 
          
     3. Click next until you get below screen and finally click Finish to deploy OVA in ESXI
+    
         ![Alt text](docs/screenshots/VMReady.png) 
     
     4. Repeat the same process for other 2 OVA to deploy itin ESXi VMware
         
 5. Configure ICAP Server
     1. In ESXI,once file upload is completed,click on k8-icap-server-1 in list of VMs and open browser console for `k8-icap-server-1`
+    
         ![Alt text](docs/screenshots/OpenConsole.png)
         
     2. You will be asked to login:
     
             glasswall login: glasswall
             password: glasswall
+            
     3. Run 
     
             sudo vim /etc/netplan/01-netcfg.yml 
@@ -56,6 +61,7 @@ This document contains Install instructions and demo walkthroughs for the Glassw
             (change IP and Gateway to an valid IP in the VM server)
             
             Below this IP is referenced as {IP of k8-icap-server-1}
+            
          ![Alt text](docs/screenshots/IcapServerNetplan.png)
                    
     4. Run:
@@ -93,8 +99,7 @@ This document contains Install instructions and demo walkthroughs for the Glassw
             ./icap-client.sh {IP of k8-icap-server-1} JS_Siemens.pdf
             
             (check Respond Headers: HTTP/1.0 200 OK to verify rebuild is successful)
-            
-            
+                  
     5. Run: 
     
             open rebuilt/rebuilt-file.pdf  
@@ -110,6 +115,7 @@ This document contains Install instructions and demo walkthroughs for the Glassw
             ./parallel-icap-requests.sh <ip of  k8-icap-server-1> 10 
            
            (it will start 10 docker containers, each making an ICAP request)
+           
     2. Run below command to see local containers life cycle: 
  
            docker stats    
