@@ -457,7 +457,13 @@ This document contains Install instructions and demo walkthroughs for the Glassw
     5. Run: `sudo systemctl restart k3s`
     
     6. After reboot open https://{IP address of file-drop}
-        - Click on Login (no password for now)
+    
+        ![Alt text](docs/screenshots/FileDrop1.png)  
+        
+    7. Click on Login (no password for now)
+    
+        ![Alt text](docs/screenshots/FileDrop2.png)
+        
         - Drop a file in the drop zone
         - Download the Protected file 
         - Click on the ‘Refresh button’
