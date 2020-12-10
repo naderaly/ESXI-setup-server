@@ -112,7 +112,7 @@ This document contains Install instructions and demo walkthroughs for the Glassw
 7. Run multiple requests in parallel
     1. Run: 
     
-            ./parallel-icap-requests.sh <ip of  k8-icap-server-1> 10 
+            ./parallel-icap-requests.sh {ip of  k8-icap-server-1} 10 
            
            (it will start 10 docker containers, each making an ICAP request)
            
@@ -130,7 +130,7 @@ This document contains Install instructions and demo walkthroughs for the Glassw
     2. Run 
     
             sudo vim /etc/netplan/00-installer-config.yaml 
-            (change IP and Gateway to an valid IP in the VM server). Below this IP is referenced as <IP of k8-proxy-server-1>
+            (change IP and Gateway to an valid IP in the VM server). Below this IP is referenced as { IP of k8-proxy-server-1 }
             
     3. Run: 
     
@@ -242,7 +242,7 @@ This document contains Install instructions and demo walkthroughs for the Glassw
             
     5. Run below in local terminal: 
             
-            ssh -L 7777:127.0.0.1:7777 glasswall@78.159.113.49
+            ssh -L 7777:127.0.0.1:7777 glasswall@{IP of k8-icap-server-1}
             
     6. Run:
     
@@ -266,34 +266,38 @@ This document contains Install instructions and demo walkthroughs for the Glassw
         
        ![Alt text](docs/screenshots/octant_screen3.png)
         
-    - Generate some traffic using `./icap-client.sh` or `./parallel-icap-requests.sh` in `icap-client-terminal`
+    - Generate some traffic using `./icap-client.sh {IP of k8-icap-server-1}` or `./parallel-icap-requests.sh {IP of k8-icap-server-1} 10` in `icap-client-terminal`
+    - The rebuld-* pods start creating and you can view pods creation in octant UI
+    
+        ![Alt text](docs/screenshots/octant_events.png)
+    
     - Click on one of the rebuild-* pods (in the Kind column), and notice
         - Summary ( for example: Pod Conditions, Environment variables, Volume Mounts, Events)
         - Resource Viewer (Graph of resources used)
         - Yaml (of Pod)
         - Logs (from inside the pod, notice the Glasswall events):
-
-			OutcomeSender Connection established to rabbitmq-service
-			TransactionEventSender Connection established to rabbitmq-service
-			Sent Transaction Event, FileId: 356cc355-832c-4ee9-92f4-b1134af0e64c, EventId: NewDocument
-			Using Glasswall Version: 1.61.34205
-			FileId: 356cc355-832c-4ee9-92f4-b1134af0e64c, Filetype Detected: Pdf
-			Sent Transaction Event, FileId: 356cc355-832c-4ee9-92f4-b1134af0e64c, EventId: FileTypeDetected
-			Sent Transaction Event, FileId: 356cc355-832c-4ee9-92f4-b1134af0e64c, EventId: AnalysisCompleted
-			Sent Transaction Event, FileId: 356cc355-832c-4ee9-92f4-b1134af0e64c, EventId: RebuildStarted
-			FileId: 356cc355-832c-4ee9-92f4-b1134af0e64c, successfully rebuilt.
-			Sent Transaction Event, FileId: 356cc355-832c-4ee9-92f4-b1134af0e64c, EventId: RebuildCompleted
-			Sent Message, ReplyTo: amq.rabbitmq.reply-to.g1hkACByYWJiaXRAcmFiYml0bXEtY29udHJvbGxlci12NmdqcAAADW4AAAAAX8nTxQ==.HY5rFxz+Z2C2J8B69FZ+TQ==, FileId: 356cc355-832c-4ee9-92f4-b1134af0e64c, Outcome: replace 
-		
-		- Terminal (not available because pod is long gone) 
-			- to open an terminal into an running pod, try the rabbitmq-controller
-				(available from http://localhost:7777/#/overview/namespace/icap-adaptation/workloads/pods)
+        
+        ![Alt text](docs/screenshots/octant_event2.png)
+        
+    - Check logs
+    
+        ![Alt text](docs/screenshots/octant_logs.png)
+			
+	        ( Terminal of rebuild-* will be gone since pods are long gone )
+	        
+	- To open an terminal into an running pod, try the rabbitmq-controller available from
+	   `http://localhost:7777/#/overview/namespace/icap-adaptation/workloads/pods`
 				
     - On the left navigation, click on Workloads and then Pods
-        - http://localhost:7777/#/overview/namespace/icap-adaptation/workloads/jobs
-        - Run: ./parallel-icap-requests.sh {ip of  k8-icap-server-1}  20         (which will make 20 requests to the server)
+     `http://localhost:7777/#/overview/namespace/icap-adaptation/workloads/pods`
+        - Run: 
+        
+                ./parallel-icap-requests.sh {ip of  k8-icap-server-1}  20
+                 (which will make 20 requests to the server)
+                 
         - Click on the ‘Age’ column to show the most recent pods at the top (they should appear when starting the Glasswall Rebuild process and disappear when completed)
-	- explore other parts of the UI to get more details about the setup and configuration of the Glasswall ICAP solution
+        
+	- Explore other parts of the UI to get more details about the setup and configuration of the Glasswall ICAP Solution.
 
 ### Part 3) Scale up and Load balancers
 
@@ -412,12 +416,12 @@ This document contains Install instructions and demo walkthroughs for the Glassw
 1. Go to VM sow-rest (File-Drop) in ESXi created in Part 1.
 
 2. Setup File Drop configarations
-    - In ESXi, open browser console for sow-rest 
+    1. In ESXi, open browser console for sow-rest 
     
             login user :  user
             password   :  secret  
             
-    - Run: 
+    2. Run: 
     
             sudo vim /etc/netplan/00-installer-config.yaml (change IP and Gateway to an valid IP in the VM server)
             
@@ -444,14 +448,22 @@ This document contains Install instructions and demo walkthroughs for the Glassw
                        addresses:
                            - 8.8.8.8
                                 
-    - Run:
+    3. Run:
     
                 sudo netplan apply 
        
-    - Run: `ping www.google.com` (to confirm that internet access is working)	
-    - Run: `sudo systemctl restart k3s`
-    - After reboot open https://{IP address of file-drop}
-        - Click on Login (no password for now)
+    4. Run: `ping www.google.com` (to confirm that internet access is working)	
+    
+    5. Run: `sudo systemctl restart k3s`
+    
+    6. After reboot open https://{IP address of file-drop}
+    
+        ![Alt text](docs/screenshots/FileDrop1.png)  
+        
+    7. Click on Login (no password for now)
+    
+        ![Alt text](docs/screenshots/FileDrop2.png)
+        
         - Drop a file in the drop zone
         - Download the Protected file 
         - Click on the ‘Refresh button’
