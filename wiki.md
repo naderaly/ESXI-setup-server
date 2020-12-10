@@ -130,7 +130,7 @@ This document contains Install instructions and demo walkthroughs for the Glassw
     2. Run 
     
             sudo vim /etc/netplan/00-installer-config.yaml 
-            (change IP and Gateway to an valid IP in the VM server). Below this IP is referenced as <IP of k8-proxy-server-1>
+            (change IP and Gateway to an valid IP in the VM server). Below this IP is referenced as { IP of k8-proxy-server-1 }
             
     3. Run: 
     
