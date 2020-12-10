@@ -112,7 +112,7 @@ This document contains Install instructions and demo walkthroughs for the Glassw
 7. Run multiple requests in parallel
     1. Run: 
     
-            ./parallel-icap-requests.sh <ip of  k8-icap-server-1> 10 
+            ./parallel-icap-requests.sh {ip of  k8-icap-server-1} 10 
            
            (it will start 10 docker containers, each making an ICAP request)
            
